@@ -18,6 +18,9 @@
                     <x-nav-link :href="route('blog')" :active="request()->routeIs('blog')">
                         {{ __('My blog') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.index')">
+                        {{ __('Products') }}
+                    </x-nav-link>
                     </a>
                     @if (Auth::user()->is_admin)
                         <a href="{{ route('categories.index') }}"

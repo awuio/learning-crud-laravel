@@ -3,6 +3,7 @@
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\IsAdminMiddleware;
 use GuzzleHttp\Promise\Is;
@@ -17,6 +18,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/blog', [BlogController::class, 'index'])->name('blog');
+    Route::resource('products', ProductsController::class);
 
     Route::middleware(IsAdminMiddleware::class)->group(function () {
         Route::resource('categories', CategoryController::class);
