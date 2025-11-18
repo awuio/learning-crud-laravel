@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <form method="POST" action="{{ route('products.store') }}">
+                    <form method="POST" action="{{ route('products.store') }}" enctype="multipart/form-data">
                         @csrf
 
                         <div>
@@ -33,13 +33,24 @@
                             <input type="text" name="price" id="price"
                                 class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                         </div>
-                        <div>
+
                         <div>
                             <div>
                                 <label for="quantity">Quantity:</label>
                             </div>
                             <input type="text" name="quantity" id="quantity"
                                 class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                        </div>
+                        <div>
+                            <div>
+                                <label for="image_url">Image</label>
+                            </div>
+                            <input type="file" name="image" id="image" accept="image/*"
+                                class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+
+                            @error('image')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
                             <div>

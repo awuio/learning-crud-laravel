@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -13,9 +14,10 @@ class ProductController extends Controller
      */
     public function index()
     {
+        $categories = Category::all();
         $products = Product::with('category')->get();
 
-        return view('products.index', compact('products'));
+        return view('products.index', compact('products', 'categories'));
     }
 
     /**
@@ -33,13 +35,21 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        Product::create([
-            'name' => $request->input('name'),
-            'description' => $request->input('description'),
-            'price' => $request->input('price'),
-            'quantity' => $request->input('quantity'),
-            'category_id' => $request->input('category_id'),
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric',
+            'quantity' => 'required|integer',
+            'category_id' => 'required|exists:categories,id',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+
         ]);
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('products', 'public');
+        }
+
+        Product::create($data);
 
         return redirect()->route('products.index');
     }
@@ -67,13 +77,29 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        $product ->update([
-            'name' => $request->input('name'),
-            'description' => $request->input('description'),
-            'price' => $request->input('price'),
-            'quantity' => $request->input('quantity'),
-            'category_id' => $request->input('category_id'),
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric',
+            'quantity' => 'required|integer',
+            'category_id' => 'required|exists:categories,id',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            
         ]);
+
+        // ถ้ามีการอัปโหลดรูปใหม่
+        if ($request->hasFile('image')) {
+
+            // ลบรูปเก่า (ถ้ามี)
+            if ($product->image) {
+                Storage::disk('public')->delete($product->image);
+            }
+
+            // อัปโหลดรูปใหม่
+            $data['image'] = $request->file('image')->store('products', 'public');
+        }
+
+        $product->update($data);
 
         return redirect()->route('products.index');
     }
@@ -83,6 +109,9 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        if ($product->image) {
+            Storage::disk('public')->delete($product->image);
+        }
         $product->delete();
 
         return redirect()->route('products.index');
