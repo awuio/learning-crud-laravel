@@ -45,7 +45,7 @@
                     </h2>
                 </div>
             </div>
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-white overflow-hidden shadow-xs sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <a href="{{ route('products.create') }}">Add new product</a>
                     <table>

@@ -12,9 +12,9 @@
             <div class="space-y-6">
                 @foreach ($products as $product)
                     <article class="flex gap-4 border-b pb-4">
-                        {{-- <img src="{{ asset('images/placeholder-150x150.png') }}" alt="Product Image" class="w-32 h-32 object-cover rounded"> --}}
+                        {{-- <img src="{{ asset('images/placeholder-150x150.png') }}" alt="Product Image" class="w-32 h-32 object-cover rounded-sm"> --}}
                         <img src="{{ asset('storage/' . $product->image) }}" alt="Product Image"
-                            class="w-32 h-32 object-cover rounded">
+                            class="w-32 h-32 object-cover rounded-sm">
                         <div>
                             <h3 class="text-lg font-semibold"><a href="#"
                                     class="hover:underline">{{ $product->name }}</a></h3>
