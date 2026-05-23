@@ -15,14 +15,13 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('blog')" :active="request()->routeIs('blog')">
-                        {{ __('My blog') }}
+                    <x-nav-link :href="route('shop')" :active="request()->routeIs('shop')">
+                        {{ __('Our Products') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.index')">
-                        {{ __('Products') }}
-                    </x-nav-link>
-                    </a>
                     @if (Auth::user()->is_admin)
+                        <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.index')">
+                            {{ __('Products') }}
+                        </x-nav-link>
                         <a href="{{ route('categories.index') }}"
                             class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-hidden focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
                             {{ __('Categories') }}
