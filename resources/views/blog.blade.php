@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Our Products') }}
+            {{ __('Blog') }}
         </h2>
     </x-slot>
 
@@ -10,23 +10,23 @@
         <section class="w-3/4 bg-white p-6 shadow-md rounded-lg">
             <h2 class="text-xl font-semibold mb-4">Latest Posts</h2>
             <div class="space-y-6">
-                @foreach ($products as $product)
+                @forelse ($posts as $post)
                     <article class="flex gap-4 border-b pb-4">
-                        {{-- <img src="{{ asset('images/placeholder-150x150.png') }}" alt="Product Image" class="w-32 h-32 object-cover rounded-sm"> --}}
-                        <img src="{{ asset('storage/' . $product->image) }}" alt="Product Image"
-                            class="w-32 h-32 object-cover rounded-sm">
                         <div>
-                            <h3 class="text-lg font-semibold"><a href="#"
-                                    class="hover:underline">{{ $product->name }}</a></h3>
-                            <p class="text-gray-600">{{ substr($product->description, 0, 200) }}...</p>
+                            <h3 class="text-lg font-semibold text-indigo-600 hover:text-indigo-900">
+                                <a href="#" class="hover:underline">{{ $post->title }}</a>
+                            </h3>
+                            <p class="text-gray-600 mt-2">{{ Str::limit($post->text, 200) }}</p>
                         </div>
                     </article>
-                @endforeach
+                @empty
+                    <p class="text-gray-500 italic">No posts found in this category.</p>
+                @endforelse
             </div>
         </section>
         <!-- Sidebar Section -->
         <aside class="w-1/4 bg-white p-6 shadow-md rounded-lg">
-            <div class="flex justify-between  mb-4">
+            <div class="flex justify-between mb-4">
                 <h2 class="text-xl font-semibold">Categories</h2>
                 <h4 class="text-base text-gray-600 font-normal hover:underline"><a href="{{ route('blog') }}">Clear</a></h4>
             </div>

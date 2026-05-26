@@ -14,11 +14,16 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('category_id')->constrained('categories');
+            $table->text('description')->nullable();
             $table->decimal('price', 10, 2);
             $table->integer('quantity');
+
+            // ส่วนสำคัญคือชุดคำสั่งนี้:
+            $table->foreignId('category_id')
+                ->constrained('categories') // 1. ผูกความสัมพันธ์กับตาราง categories
+                ->restrictOnDelete();       // 2. บังคับไม่ให้ลบหมวดหมู่ถ้ามีสินค้านี้อยู่
+
             $table->string('image')->nullable();
-            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

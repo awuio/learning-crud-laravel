@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -15,16 +17,28 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $categories = Category::all();
-        
+
         $query = Product::with('category');
 
         if ($request->filled('category_id')) {
             $query->where('category_id', $request->category_id);
         }
 
-        $products = $query->get();
+        // คำนวณค่าสถิติจากสินค้าที่ตรงตามเงื่อนไข (ก่อนทำการแบ่งหน้า)
+        $totalProductsCount = $query->count();
+        $totalQuantitySum = $query->sum('quantity');
+        $totalStockValueSum = $query->sum(\Illuminate\Support\Facades\DB::raw('price * quantity'));
 
-        return view('products.index', compact('products', 'categories'));
+        // แบ่งหน้าละ 10 รายการ และคงค่า Query String (เช่น category_id) ในลิงก์เปลี่ยนหน้า
+        $products = $query->paginate(10)->withQueryString();
+
+        return view('products.index', compact(
+            'products',
+            'categories',
+            'totalProductsCount',
+            'totalQuantitySum',
+            'totalStockValueSum'
+        ));
     }
 
     /**
@@ -40,17 +54,9 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric',
-            'quantity' => 'required|integer',
-            'category_id' => 'required|exists:categories,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-
-        ]);
+        $data = $request->validated();
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('products', 'public');
@@ -82,33 +88,32 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(UpdateProductRequest $request, Product $product)
     {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric',
-            'quantity' => 'required|integer',
-            'category_id' => 'required|exists:categories,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            
-        ]);
+        // 1. ดึงข้อมูลที่ผ่านการ Validate มาเก็บไว้
+        $validated = $request->validated();
 
-        // ถ้ามีการอัปโหลดรูปใหม่
+        // 2. ตรวจสอบว่ามีการอัปโหลดไฟล์รูปภาพ "ใหม่" เข้ามาหรือไม่
         if ($request->hasFile('image')) {
 
-            // ลบรูปเก่า (ถ้ามี)
+            // 2.1 ถ้ามีรูปภาพเดิมอยู่แล้ว ให้ลบออกจากโฟลเดอร์เพื่อประหยัดพื้นที่
             if ($product->image) {
                 Storage::disk('public')->delete($product->image);
             }
 
-            // อัปโหลดรูปใหม่
-            $data['image'] = $request->file('image')->store('products', 'public');
+            // 2.2 อัปโหลดรูปภาพใหม่ และนำ Path ที่ได้ไปแทนที่ใน Array
+            $validated['image'] = $request->file('image')->store('products', 'public');
+
+        } else {
+            // 2.3 ถ้า "ไม่มี" การอัปโหลดรูปใหม่ ให้ถอดคีย์ image ออกจาก Array
+            // เพื่อป้องกันไม่ให้ระบบนำค่า null ไปเขียนทับ Path รูปเดิมในฐานข้อมูล
+            unset($validated['image']);
         }
 
-        $product->update($data);
+        // 3. อัปเดตข้อมูลทั้งหมดลงฐานข้อมูลในครั้งเดียว
+        $product->update($validated);
 
-        return redirect()->route('products.index');
+        return redirect()->route('products.index')->with('success', 'อัปเดตข้อมูลสินค้าสำเร็จ');
     }
 
     /**

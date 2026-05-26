@@ -55,7 +55,7 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
+            'name' => 'required|string|max:255|unique:categories,name,'.$category->id,
         ]);
 
         $category->update([
@@ -70,8 +70,13 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        // ตรวจสอบว่ามีสินค้าหรือโพสต์ที่เชื่อมโยงกับหมวดหมู่นี้อยู่หรือไม่
+        if ($category->products()->exists() || $category->posts()->exists()) {
+            return redirect()->back()->with('error', 'ไม่สามารถลบหมวดหมู่นี้ได้ เนื่องจากยังมีสินค้าหรือโพสต์ที่ใช้งานหมวดหมู่นี้อยู่');
+        }
+
         $category->delete();
 
-        return redirect()->route('categories.index');
+        return redirect()->route('categories.index')->with('success', 'ลบหมวดหมู่สำเร็จเรียบร้อยแล้ว');
     }
 }

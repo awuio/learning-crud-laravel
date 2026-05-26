@@ -13,8 +13,8 @@
                 @foreach ($products as $product)
                     <article class="flex gap-4 border-b pb-4">
                         {{-- <img src="{{ asset('images/placeholder-150x150.png') }}" alt="Product Image" class="w-32 h-32 object-cover rounded-sm"> --}}
-                        <img src="{{ asset('storage/' . $product->image) }}" alt="Product Image"
-                            class="w-32 h-32 object-cover rounded-sm">
+                        <img src="{{ $product->image ? (str_starts_with($product->image, 'http') ? $product->image : asset('storage/' . $product->image)) : 'https://placehold.co/600x400/png' }}"
+                            alt="Product Image" class="w-32 h-32 object-cover rounded-sm">
                         <div class="flex flex-col justify-between">
                             <h3 class="text-lg font-semibold"><a href="#"
                                     class="hover:underline">{{ $product->name }}</a></h3>
@@ -27,17 +27,24 @@
                     </article>
                 @endforeach
             </div>
+
+            <div class="mt-4">
+                {{ $products->links() }}
+            </div>
+
         </section>
         <!-- Sidebar Section -->
         <aside class="w-1/4 bg-white p-6 shadow-md rounded-lg">
             <div class="flex justify-between  mb-4">
                 <h2 class="text-xl font-semibold">Categories</h2>
-                <h4 class="text-base text-gray-600 font-normal hover:underline"><a href="{{ route('shop') }}">Clear</a></h4>
+                <h4 class="text-base text-gray-600 font-normal hover:underline"><a href="{{ route('shop') }}">Clear</a>
+                </h4>
             </div>
             <ul class="space-y-2">
                 @foreach ($categories as $category)
                     <li><a href="{{ route('shop', ['category_id' => $category->id]) }}"
-                            class="{{ request('category_id') == $category->id ? 'text-gray-800 font-bold underline' : 'text-gray-600 hover:underline' }}">{{ $category->name }}</a></li>
+                            class="{{ request('category_id') == $category->id ? 'text-gray-800 font-bold underline' : 'text-gray-600 hover:underline' }}">{{ $category->name }}</a>
+                    </li>
                 @endforeach
             </ul>
         </aside>

@@ -43,10 +43,7 @@ class LoginRequest extends FormRequest
 
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
-
-            throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
-            ]);
+            throw ValidationException::withMessages(['email' => 'อีเมลหรือรหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง']);
         }
 
         RateLimiter::clear($this->throttleKey());
@@ -81,5 +78,14 @@ class LoginRequest extends FormRequest
     public function throttleKey(): string
     {
         return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+    }
+
+    public function messages(): array
+    {
+        return [
+            'email.required' => 'กรุณากรอกอีเมลเพื่อเข้าสู่ระบบ',
+            'email.email' => 'รูปแบบอีเมลไม่ถูกต้อง',
+            'password.required' => 'กรุณากรอกรหัสผ่านของคุณ',
+        ];
     }
 }

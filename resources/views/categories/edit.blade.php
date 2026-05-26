@@ -11,7 +11,8 @@
                 <div class="p-6 text-gray-900">
                     <div class="mb-6">
                         <h3 class="text-lg font-medium text-gray-900">Edit Category</h3>
-                        <p class="text-sm text-gray-500 mt-1">Update the name of the category. This will update the category name across all associated posts and products.</p>
+                        <p class="text-sm text-gray-500 mt-1">Update the name of the category. This will update the
+                            category name across all associated posts and products.</p>
                     </div>
 
                     @if ($errors->any())
@@ -19,11 +20,14 @@
                             <div class="flex">
                                 <div class="flex-shrink-0">
                                     <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                            clip-rule="evenodd" />
                                     </svg>
                                 </div>
                                 <div class="ml-3">
-                                    <h3 class="text-sm font-medium text-red-800">Please correct the following errors:</h3>
+                                    <h3 class="text-sm font-medium text-red-800">Please correct the following errors:
+                                    </h3>
                                     <ul class="mt-2 list-disc list-inside text-sm text-red-700">
                                         @foreach ($errors->all() as $error)
                                             <li>{{ $error }}</li>
@@ -40,7 +44,9 @@
                         <div>
                             <label for="name" class="block text-sm font-medium text-gray-700">Category Name</label>
                             <div class="mt-1">
-                                <input type="text" name="name" id="name" value="{{ old('name', $category->name) }}" required class="block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                <input type="text" name="name" id="name"
+                                    value="{{ old('name', $category->name) }}" required
+                                    class="block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                             </div>
                             @error('name')
                                 <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -48,10 +54,12 @@
                         </div>
 
                         <div class="flex items-center justify-end space-x-3 pt-4 border-t border-gray-100">
-                            <a href="{{ route('categories.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-xs hover:bg-gray-50 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                            <a href="{{ route('categories.index') }}"
+                                class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-xs hover:bg-gray-50 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
                                 Cancel
                             </a>
-                            <button type="submit" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-900 focus:outline-hidden focus:border-indigo-950 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 shadow-xs">
+                            <button type="submit"
+                                class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-900 focus:outline-hidden focus:border-indigo-950 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 shadow-xs">
                                 Save Changes
                             </button>
                         </div>
