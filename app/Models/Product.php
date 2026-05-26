@@ -13,6 +13,7 @@ class Product extends Model
         'quantity',
         'category_id',
         'image',
+        'views',
     ];
 
     public function category()

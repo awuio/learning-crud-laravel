@@ -22,14 +22,19 @@ class ShopController extends Controller
             ->latest()
             ->paginate(12);
 
-        return view('shop', compact('categories', 'products'));
+        $popularProducts = Product::orderBy('views', 'desc')
+            ->take(10)
+            ->get();
+
+        return view('shop', compact('categories', 'products', 'popularProducts'));
     }
 
     // หน้าแสดงรายละเอียดสินค้า "ทีละ 1 ชิ้น"
     public function show(Product $product)
     {
-        // โค้ดสำหรับหน้าแสดงสินค้า 1 ชิ้น ควรเรียบง่ายแค่นี้เลยครับ
-        // เพราะ Laravel ดึงข้อมูลสินค้าชิ้นนั้นมาให้ผ่านตัวแปร $product เรียบร้อยแล้ว (Route Model Binding)
+        $product->timestamps = false;
+        $product->increment('views');
+
         return view('shop.show', compact('product'));
     }
 }

@@ -14,6 +14,7 @@ Route::get('/', function () {
 });
 
 Route::get('/shop', [ShopController::class, 'index'])->name('shop');
+Route::get('/shop/{product}', [ShopController::class, 'show'])->name('shop.show');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
