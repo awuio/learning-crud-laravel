@@ -18,7 +18,7 @@ return new class extends Migration
         Schema::table('products', function (Blueprint $table) {
             $table->softDeletes();
         });
-        
+
         Schema::table('posts', function (Blueprint $table) {
             $table->softDeletes();
         });

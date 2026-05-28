@@ -6,18 +6,23 @@ use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Category;
 use App\Models\Product;
+use App\Services\ProductService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
+    public function __construct(
+        protected ProductService $productService
+    ) {}
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $categories = Category::all();
+        $categories = Category::getCachedAll();
 
         // Build the base query with eager-loaded category to avoid N+1
         $query = Product::with('category');
@@ -53,7 +58,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categories = Category::all();
+        $categories = Category::getCachedAll();
 
         return view('products.create', compact('categories'));
     }
@@ -63,32 +68,18 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        $data = $request->validated();
-        $uploadedImage = null;
-
         try {
-            if ($request->hasFile('image')) {
-                // Store the uploaded image first
-                $uploadedImage = $request->file('image')->store('products', 'public');
-                $data['image'] = $uploadedImage;
-            }
+            $this->productService->createProduct($request->validated(), $request->file('image'));
 
-            Product::create($data);
-
-            return redirect()->route('products.index')->with('success', 'สร้างสินค้าใหม่สำเร็จเรียบร้อยแล้ว');
+            return redirect()->route('products.index')->with('success', __('messages.product_created'));
         } catch (\Exception $e) {
-            // Clean up the uploaded image from disk storage if database record creation fails
-            if ($uploadedImage) {
-                Storage::disk('public')->delete($uploadedImage);
-            }
-
-            Log::error('Product Creation Failed: ' . $e->getMessage(), [
-                'request_data' => $request->except('image')
+            Log::error('Product Creation Failed: '.$e->getMessage(), [
+                'request_data' => $request->except('image'),
             ]);
 
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'เกิดข้อผิดพลาดจากระบบ ไม่สามารถบันทึกข้อมูลสินค้าได้ กรุณาลองใหม่อีกครั้ง หรือติดต่อผู้ดูแลระบบ');
+                ->with('error', __('messages.product_error'));
         }
     }
 
@@ -105,7 +96,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        $categories = Category::all();
+        $categories = Category::getCachedAll();
 
         return view('products.edit', compact('product', 'categories'));
     }
@@ -115,43 +106,19 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-        $validated = $request->validated();
-        $oldImage = $product->image;
-        $newImageUploaded = null;
-
         try {
-            if ($request->hasFile('image')) {
-                // Upload new image first, but do not delete old one yet (database integrity)
-                $newImageUploaded = $request->file('image')->store('products', 'public');
-                $validated['image'] = $newImageUploaded;
-            } else {
-                // Prevent over-writing old image with null when no new image is uploaded
-                unset($validated['image']);
-            }
+            $this->productService->updateProduct($product, $request->validated(), $request->file('image'));
 
-            // Update database record
-            $product->update($validated);
-
-            // If database update succeeds, delete old image to free disk space
-            if ($newImageUploaded && $oldImage) {
-                Storage::disk('public')->delete($oldImage);
-            }
-
-            return redirect()->route('products.index')->with('success', 'อัปเดตข้อมูลสินค้าสำเร็จ');
+            return redirect()->route('products.index')->with('success', __('messages.product_updated'));
         } catch (\Exception $e) {
-            // Clean up the new uploaded image from disk storage if database update fails
-            if ($newImageUploaded) {
-                Storage::disk('public')->delete($newImageUploaded);
-            }
-
-            Log::error('Product Update Failed: ' . $e->getMessage(), [
+            Log::error('Product Update Failed: '.$e->getMessage(), [
                 'product_id' => $product->id,
-                'request_data' => $request->except('image')
+                'request_data' => $request->except('image'),
             ]);
 
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'เกิดข้อผิดพลาดจากระบบ ไม่สามารถอัปเดตข้อมูลสินค้าได้ กรุณาลองใหม่อีกครั้ง หรือติดต่อผู้ดูแลระบบ');
+                ->with('error', __('messages.product_error'));
         }
     }
 
@@ -164,6 +131,6 @@ class ProductController extends Controller
         // It should remain accessible if the product is restored or for reporting purposes.
         $product->delete();
 
-        return redirect()->route('products.index')->with('success', 'ลบสินค้าสำเร็จเรียบร้อยแล้ว');
+        return redirect()->route('products.index')->with('success', __('messages.product_deleted'));
     }
 }

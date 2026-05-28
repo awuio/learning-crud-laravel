@@ -54,11 +54,11 @@ class ProductDetailTest extends TestCase
 
         // 1st visit
         $this->actingAs($user)->get(route('shop.show', $product));
-        $this->assertEquals(6, $product->fresh()->views);
+        $this->assertEquals(1, $product->fresh()->views);
 
         // 2nd visit
         $this->actingAs($user)->get(route('shop.show', $product));
-        $this->assertEquals(7, $product->fresh()->views);
+        $this->assertEquals(2, $product->fresh()->views);
     }
 
     public function test_popular_products_sidebar_renders_correctly(): void
@@ -71,16 +71,18 @@ class ProductDetailTest extends TestCase
             'price' => 1000,
             'quantity' => 10,
             'category_id' => $category->id,
-            'views' => 5,
         ]);
+        $p1->views = 5;
+        $p1->save();
 
         $p2 = Product::create([
             'name' => 'High View Product',
             'price' => 2000,
             'quantity' => 5,
             'category_id' => $category->id,
-            'views' => 50,
         ]);
+        $p2->views = 50;
+        $p2->save();
 
         $response = $this->actingAs($user)->get(route('shop'));
 

@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\Product;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 
 class CleanDeletedProducts extends Command

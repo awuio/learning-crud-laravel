@@ -34,15 +34,12 @@ class RegisteredUserController extends Controller
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ], [
-            // ข้อความกรณีอีเมลซ้ำ (เป้าหมายหลักที่คุณต้องการ)
-            'email.unique' => 'อีเมลนี้ถูกใช้งานแล้ว กรุณาใช้อีเมลอื่น',
-
-            // (Optional) ไหนๆ ก็แก้แล้ว คุณสามารถแปลแจ้งเตือนอื่นๆ ในหน้านี้เผื่อไว้ได้เลยครับ
-            'name.required' => 'กรุณากรอกชื่อของคุณ',
-            'email.required' => 'กรุณากรอกอีเมล',
-            'email.email' => 'รูปแบบอีเมลไม่ถูกต้อง',
-            'password.required' => 'กรุณากรอกรหัสผ่าน',
-            'password.confirmed' => 'รหัสผ่านและการยืนยันรหัสผ่านไม่ตรงกัน',
+            'email.unique' => __('validation.custom.email.unique'),
+            'name.required' => __('validation.custom.name.required'),
+            'email.required' => __('validation.custom.email.required'),
+            'email.email' => __('validation.custom.email.email'),
+            'password.required' => __('validation.custom.password.required'),
+            'password.confirmed' => __('validation.custom.password.confirmed'),
         ]);
 
         $user = User::create([

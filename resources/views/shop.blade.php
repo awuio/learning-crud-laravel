@@ -12,7 +12,7 @@
                 <!-- Products Catalog Section -->
                 <main class="lg:col-span-3 space-y-6">
                     <div class="bg-white border border-zinc-200 rounded-xl p-6 shadow-sm">
-                        <h2 class="text-xl font-bold text-zinc-900 mb-6 tracking-tight">Latest Products</h2>
+                        <h2 class="text-xl font-bold text-zinc-900 mb-6 tracking-tight">{{ __('messages.latest_products') }}</h2>
                         
                         <div class="divide-y divide-zinc-100 space-y-6">
                             @forelse ($products as $product)
@@ -28,7 +28,7 @@
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-zinc-300">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
                                             </svg>
-                                            <span class="text-[10px] font-bold tracking-wider uppercase text-zinc-400">No Image</span>
+                                            <span class="text-[10px] font-bold tracking-wider uppercase text-zinc-400">{{ __('messages.no_image') }}</span>
                                         </a>
                                     @endif
                                     
@@ -45,7 +45,7 @@
                                             </div>
                                             
                                             <p class="text-sm leading-relaxed text-zinc-500 line-clamp-3">
-                                                {{ $product->description ?: 'No description available for this product.' }}
+                                                {{ $product->description ?: __('messages.no_description') }}
                                             </p>
                                         </div>
                                         
@@ -65,11 +65,11 @@
                                                     'text-amber-700 bg-amber-50 ring-amber-600/10' => $product->quantity > 0 && $product->quantity <= 5,
                                                     'text-red-700 bg-red-50 ring-red-600/10' => $product->quantity === 0,
                                                 ])>
-                                                    {{ $product->quantity > 0 ? 'In Stock (' . $product->quantity . ' ชิ้น)' : 'หมดสต็อก' }}
+                                                    {{ $product->quantity > 0 ? __('messages.in_stock', ['count' => $product->quantity]) : __('messages.out_of_stock') }}
                                                 </span>
                                                 
                                                 <a href="{{ route('shop.show', $product) }}" class="inline-flex items-center text-xs font-semibold text-zinc-900 hover:text-zinc-700">
-                                                    View Details
+                                                    {{ __('messages.view_details') }}
                                                     <svg class="ml-1 h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                                         <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                                                     </svg>
@@ -83,8 +83,8 @@
                                     <svg class="mx-auto h-12 w-12 text-zinc-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
                                     </svg>
-                                    <h3 class="mt-2 text-sm font-semibold text-zinc-900">No products found</h3>
-                                    <p class="mt-1 text-sm text-zinc-500">There are no products available in this category at the moment.</p>
+                                    <h3 class="mt-2 text-sm font-semibold text-zinc-900">{{ __('messages.no_products_found') }}</h3>
+                                    <p class="mt-1 text-sm text-zinc-500">{{ __('messages.no_products_desc') }}</p>
                                 </div>
                             @endforelse
                         </div>
@@ -103,10 +103,10 @@
                     <!-- Categories -->
                     <div class="bg-white border border-zinc-200 rounded-xl p-6 shadow-sm">
                         <div class="flex items-center justify-between mb-4 pb-2 border-b border-zinc-100">
-                            <h2 class="text-sm font-bold text-zinc-900 uppercase tracking-wider">Categories</h2>
+                            <h2 class="text-sm font-bold text-zinc-900 uppercase tracking-wider">{{ __('messages.categories') }}</h2>
                             @if(request('category_id'))
                                 <a href="{{ route('shop') }}" class="text-xs text-zinc-500 hover:text-zinc-900 hover:underline flex items-center gap-1">
-                                    Clear Filter
+                                    {{ __('messages.clear_filter') }}
                                 </a>
                             @endif
                         </div>
@@ -114,7 +114,7 @@
                         <nav class="space-y-1">
                             <a href="{{ route('shop') }}" 
                                class="group flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-all {{ !request('category_id') ? 'bg-zinc-900 text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900' }}">
-                                <span>All Products</span>
+                                <span>{{ __('messages.all_products') }}</span>
                             </a>
                             
                             @foreach ($categories as $category)
@@ -129,7 +129,7 @@
                     <!-- Popular Products -->
                     <div class="bg-white border border-zinc-200 rounded-xl p-6 shadow-sm">
                         <div class="flex items-center justify-between mb-4 pb-2 border-b border-zinc-100">
-                            <h2 class="text-sm font-bold text-zinc-900 uppercase tracking-wider">Popular Products</h2>
+                            <h2 class="text-sm font-bold text-zinc-900 uppercase tracking-wider">{{ __('messages.popular_products') }}</h2>
                         </div>
                         
                         <ul class="space-y-3">
@@ -155,7 +155,7 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                             </svg>
-                                            {{ number_format($popProduct->views) }} views
+                                            {{ number_format($popProduct->views) }} {{ __('messages.views') }}
                                         </span>
                                     </div>
                                 </li>

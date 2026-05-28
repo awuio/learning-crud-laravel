@@ -7,7 +7,7 @@
 
     <div class="py-8">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white border border-zinc-200 rounded-lg">
+            <div class="bg-white border border-zinc-200 rounded-lg" x-data="{ deletePostId: null, deletePostTitle: '' }">
                 <!-- Card Header -->
                 <div class="flex items-center justify-between px-6 py-4 border-b border-zinc-200">
                     <div>
@@ -23,7 +23,7 @@
                 </div>
 
                 <!-- Table -->
-                <div class="overflow-x-auto" x-data="{ deletePostId: null, deletePostTitle: '' }">
+                <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-zinc-200">
                         <thead>
                             <tr class="bg-zinc-50">
@@ -72,7 +72,7 @@
                                             <x-secondary-button href="{{ route('posts.edit', $post) }}" class="h-7 px-2.5 text-xs">
                                                 Edit
                                             </x-secondary-button>
-                                            <x-danger-button type="button" class="h-7 px-2.5 text-xs"
+                                            <x-danger-button type="button" variant="link" class="h-7 px-2.5 text-xs"
                                                 x-on:click.prevent="deletePostId = {{ $post->id }}; deletePostTitle = '{{ addslashes($post->title) }}'; $dispatch('open-modal', 'confirm-post-deletion')">
                                                 Delete
                                             </x-danger-button>
@@ -88,28 +88,28 @@
                             @endforelse
                         </tbody>
                     </table>
-
-                    <x-modal name="confirm-post-deletion" focusable maxWidth="sm">
-                        <form method="post" x-bind:action="'{{ route('posts.destroy', 'POST_ID') }}'.replace('POST_ID', deletePostId)" class="p-6">
-                            @csrf
-                            @method('DELETE')
-                            <h2 class="text-lg font-medium text-zinc-900">
-                                Confirm Deletion
-                            </h2>
-                            <p class="mt-2 text-sm text-zinc-600">
-                                Are you sure you want to delete post: <strong class="text-zinc-900" x-text="deletePostTitle"></strong>?
-                            </p>
-                            <div class="mt-6 flex justify-end gap-3">
-                                <x-secondary-button type="button" x-on:click="$dispatch('close')">
-                                    Cancel
-                                </x-secondary-button>
-                                <x-danger-button>
-                                    Delete Post
-                                </x-danger-button>
-                            </div>
-                        </form>
-                    </x-modal>
                 </div>
+
+                <x-modal name="confirm-post-deletion" focusable maxWidth="sm">
+                    <form method="post" x-bind:action="'{{ route('posts.destroy', 'POST_ID') }}'.replace('POST_ID', deletePostId)" class="p-6">
+                        @csrf
+                        @method('DELETE')
+                        <h2 class="text-lg font-medium text-zinc-900">
+                            Confirm Deletion
+                        </h2>
+                        <p class="mt-2 text-sm text-zinc-600">
+                            Are you sure you want to delete post: <strong class="text-zinc-900" x-text="deletePostTitle"></strong>?
+                        </p>
+                        <div class="mt-6 flex justify-end gap-3">
+                            <x-secondary-button type="button" x-on:click="$dispatch('close')">
+                                Cancel
+                            </x-secondary-button>
+                            <x-danger-button>
+                                Delete Post
+                            </x-danger-button>
+                        </div>
+                    </form>
+                </x-modal>
 
                 <!-- Pagination -->
                 @if ($posts->hasPages())

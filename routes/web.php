@@ -13,6 +13,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/lang/{locale}', function ($locale) {
+    if (in_array($locale, ['en', 'th'])) {
+        session()->put('locale', $locale);
+    }
+
+    return redirect()->back();
+})->name('lang.switch');
+
 Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 Route::get('/shop/{product}', [ShopController::class, 'show'])->name('shop.show');
 

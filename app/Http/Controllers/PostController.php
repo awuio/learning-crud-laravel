@@ -18,7 +18,7 @@ class PostController extends Controller
 
     public function create()
     {
-        $categories = Category::all();
+        $categories = Category::getCachedAll();
 
         return view('posts.create', compact('categories'));
     }
@@ -27,7 +27,7 @@ class PostController extends Controller
     {
         Post::create($request->validated());
 
-        return redirect()->route('posts.index')->with('success', 'โพสต์ใหม่ถูกสร้างเรียบร้อยแล้ว');
+        return redirect()->route('posts.index')->with('success', __('messages.post_created'));
     }
 
     public function show(Post $post)
@@ -38,7 +38,7 @@ class PostController extends Controller
 
     public function edit(Post $post)
     {
-        $categories = Category::all();
+        $categories = Category::getCachedAll();
 
         return view('posts.edit', compact('post', 'categories'));
     }
@@ -49,13 +49,13 @@ class PostController extends Controller
         // ใช้ $request->validated() เพื่อดึงเฉพาะข้อมูลที่อยู่ใน rules() มาอัปเดต
         $post->update($request->validated());
 
-        return redirect()->route('posts.index')->with('success', 'อัปเดตโพสต์เรียบร้อยแล้ว');
+        return redirect()->route('posts.index')->with('success', __('messages.post_updated'));
     }
 
     public function destroy(Post $post)
     {
         $post->delete();
 
-        return redirect()->route('posts.index')->with('success', 'ลบโพสต์เรียบร้อยแล้ว');
+        return redirect()->route('posts.index')->with('success', __('messages.post_deleted'));
     }
 }

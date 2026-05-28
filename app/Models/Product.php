@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
+
     /**
      * Fields that are safe to mass-assign.
      * Note: 'views' is intentionally excluded — use incrementViews() instead.
@@ -39,12 +41,12 @@ class Product extends Model
      */
     public function getImageUrlAttribute(): ?string
     {
-        if (!$this->image) {
+        if (! $this->image) {
             return null;
         }
-        
-        return str_starts_with($this->image, 'http') 
-            ? $this->image 
+
+        return str_starts_with($this->image, 'http')
+            ? $this->image
             : \Illuminate\Support\Facades\Storage::url($this->image);
     }
 

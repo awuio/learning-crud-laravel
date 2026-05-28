@@ -33,7 +33,7 @@ class CategoryController extends Controller
     {
         Category::create($request->validated());
 
-        return redirect()->route('categories.index')->with('success', 'สร้างหมวดหมู่ใหม่สำเร็จเรียบร้อยแล้ว');
+        return redirect()->route('categories.index')->with('success', __('messages.category_created'));
     }
 
     /**
@@ -51,7 +51,7 @@ class CategoryController extends Controller
     {
         $category->update($request->validated());
 
-        return redirect()->route('categories.index')->with('success', 'อัปเดตข้อมูลหมวดหมู่สำเร็จเรียบร้อยแล้ว');
+        return redirect()->route('categories.index')->with('success', __('messages.category_updated'));
     }
 
     /**
@@ -61,11 +61,11 @@ class CategoryController extends Controller
     {
         // ตรวจสอบว่ามีสินค้าหรือโพสต์ที่เชื่อมโยงกับหมวดหมู่นี้อยู่หรือไม่
         if ($category->products()->exists() || $category->posts()->exists()) {
-            return redirect()->back()->with('error', 'ไม่สามารถลบหมวดหมู่นี้ได้ เนื่องจากยังมีสินค้าหรือโพสต์ที่ใช้งานหมวดหมู่นี้อยู่');
+            return redirect()->back()->with('error', __('messages.category_delete_error'));
         }
 
         $category->delete();
 
-        return redirect()->route('categories.index')->with('success', 'ลบหมวดหมู่สำเร็จเรียบร้อยแล้ว');
+        return redirect()->route('categories.index')->with('success', __('messages.category_deleted'));
     }
 }

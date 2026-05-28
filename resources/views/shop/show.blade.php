@@ -9,7 +9,7 @@
                     stroke="currentColor" class="w-3.5 h-3.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
                 </svg>
-                {{ __('Back to Shop') }}
+                {{ __('messages.back_to_shop') }}
             </a>
         </div>
     </x-slot>
@@ -31,7 +31,7 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-zinc-300">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
                                     </svg>
-                                    <span class="text-xs font-bold tracking-widest uppercase text-zinc-400">No Image Available</span>
+                                    <span class="text-xs font-bold tracking-widest uppercase text-zinc-400">{{ __('messages.no_image') }}</span>
                                 </div>
                             @endif
 
@@ -46,7 +46,7 @@
                                         d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                 </svg>
                                 <span class="text-xs font-bold text-zinc-800 tabular-nums">
-                                    {{ number_format($product->views) }} {{ __('views') }}
+                                    {{ number_format($product->views) }} {{ __('messages.views') }}
                                 </span>
                             </div>
                         </div>
@@ -76,28 +76,28 @@
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                         </svg>
-                                        {{ number_format($product->views) }} views since launch
+                                        {{ number_format($product->views) }} {{ __('messages.views') }}
                                     </span>
                                 </div>
 
                                 <!-- Price Box -->
                                 <div class="bg-zinc-50 border border-zinc-200/60 rounded-xl p-5 mb-6">
                                     <p class="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">
-                                        {{ __('Price') }}
+                                        {{ __('messages.price') }}
                                     </p>
                                     <div class="flex items-baseline gap-1.5">
                                         <span class="text-3xl font-black text-zinc-900">฿{{ number_format($product->price, 0) }}</span>
-                                        <span class="text-xs text-zinc-400 font-semibold">/ unit</span>
+                                        <span class="text-xs text-zinc-400 font-semibold">{{ __('messages.per_unit') }}</span>
                                     </div>
                                 </div>
 
                                 <!-- Description -->
                                 <div class="prose prose-zinc max-w-none mb-8">
                                     <h3 class="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-2">
-                                        {{ __('Product Description') }}
+                                        {{ __('messages.product_desc_title') }}
                                     </h3>
                                     <p class="text-sm text-zinc-600 leading-relaxed whitespace-pre-line">
-                                        {{ $product->description ?: 'No description available for this product.' }}
+                                        {{ $product->description ?: __('messages.no_description') }}
                                     </p>
                                 </div>
                             </div>
@@ -105,16 +105,16 @@
                             <!-- Inventory Status and Actions -->
                             <div class="border-t border-zinc-100 pt-6">
                                 <div class="flex items-center justify-between mb-6">
-                                    <span class="text-sm font-medium text-zinc-500">{{ __('Availability') }}</span>
+                                    <span class="text-sm font-medium text-zinc-500">{{ __('messages.availability') }}</span>
                                     @if ($product->quantity > 0)
                                         <span class="inline-flex items-center rounded-md px-2.5 py-0.5 text-xs font-bold ring-1 ring-inset text-emerald-700 bg-emerald-50 ring-emerald-600/10 gap-1.5">
                                             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                                            {{ __('In Stock') }} ({{ $product->quantity }} units)
+                                            {{ __('messages.in_stock', ['count' => $product->quantity]) }}
                                         </span>
                                     @else
                                         <span class="inline-flex items-center rounded-md px-2.5 py-0.5 text-xs font-bold ring-1 ring-inset text-red-700 bg-red-50 ring-red-600/10 gap-1.5">
                                             <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
-                                            {{ __('Out of Stock') }}
+                                            {{ __('messages.out_of_stock') }}
                                         </span>
                                     @endif
                                 </div>
@@ -139,10 +139,10 @@
                             </span>
                             <div>
                                 <h3 class="text-2xl font-extrabold text-zinc-900 tracking-tight">
-                                    {{ __('สินค้าอื่นๆ ในหมวดหมู่เดียวกัน') }}
+                                    {{ __('messages.related_products') }}
                                 </h3>
                                 <p class="text-xs font-semibold text-zinc-400 mt-0.5">
-                                    {{ __('สินค้าที่คุณอาจจะสนใจจากหมวดหมู่เดียวกัน') }}
+                                    {{ __('messages.related_products_desc') }}
                                 </p>
                             </div>
                         </div>
@@ -195,7 +195,7 @@
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-zinc-300">
                                                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
                                                     </svg>
-                                                    <span class="text-[9px] font-bold tracking-wider uppercase text-zinc-400">No Image</span>
+                                                    <span class="text-[9px] font-bold tracking-wider uppercase text-zinc-400">{{ __('messages.no_image') }}</span>
                                                 </div>
                                             @endif
 
@@ -219,7 +219,7 @@
                                                     <a href="{{ route('shop.show', $related) }}">{{ $related->name }}</a>
                                                 </h4>
                                                 <p class="text-xs text-zinc-400 line-clamp-2 mb-4 font-medium">
-                                                    {{ $related->description ?: 'No description available.' }}
+                                                    {{ $related->description ?: __('messages.no_description') }}
                                                 </p>
                                             </div>
                                             
@@ -232,7 +232,7 @@
                                                     'text-emerald-700 bg-emerald-50 ring-emerald-600/10' => $related->quantity > 0,
                                                     'text-red-700 bg-red-50 ring-red-600/10' => $related->quantity === 0,
                                                 ])>
-                                                    {{ $related->quantity > 0 ? __('In Stock') : __('Out of Stock') }}
+                                                    {{ $related->quantity > 0 ? __('messages.in_stock_short') : __('messages.out_of_stock') }}
                                                 </span>
                                             </div>
                                         </div>
