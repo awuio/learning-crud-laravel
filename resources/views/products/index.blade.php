@@ -12,12 +12,12 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <!-- Category Filter -->
                 <div class="bg-white border border-zinc-200 rounded-lg p-4 flex flex-col justify-between">
-                    <span class="text-xs font-medium text-zinc-500 uppercase tracking-wider">Filter by Category</span>
+                    <span class="text-xs font-medium text-zinc-500 uppercase tracking-wider">{{ __('Filter by Category') }}</span>
                     <div class="mt-3">
                         <form method="GET" action="{{ route('products.index') }}">
                             <select name="category_id" onchange="this.form.submit()"
                                 class="flex h-9 w-full rounded-md border border-zinc-300 bg-white px-3 py-1 text-sm text-zinc-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:border-zinc-400">
-                                <option value="">All Categories</option>
+                                <option value="">{{ __('All Categories') }}</option>
                                 @foreach ($categories as $category)
                                     <option value="{{ $category->id }}"
                                         {{ request('category_id') == $category->id ? 'selected' : '' }}>
@@ -31,19 +31,19 @@
 
                 <!-- Total Products -->
                 <div class="bg-white border border-zinc-200 rounded-lg p-4 flex flex-col justify-between">
-                    <span class="text-xs font-medium text-zinc-500 uppercase tracking-wider">Total Products</span>
+                    <span class="text-xs font-medium text-zinc-500 uppercase tracking-wider">{{ __('Total Products') }}</span>
                     <span class="text-3xl font-bold text-zinc-900 mt-2">{{ number_format($totalProductsCount) }}</span>
                 </div>
 
                 <!-- Total Quantity -->
                 <div class="bg-white border border-zinc-200 rounded-lg p-4 flex flex-col justify-between">
-                    <span class="text-xs font-medium text-zinc-500 uppercase tracking-wider">Total Quantity</span>
+                    <span class="text-xs font-medium text-zinc-500 uppercase tracking-wider">{{ __('Total Quantity') }}</span>
                     <span class="text-3xl font-bold text-zinc-900 mt-2">{{ number_format($totalQuantitySum) }}</span>
                 </div>
 
                 <!-- Total Stock Value -->
                 <div class="bg-white border border-zinc-200 rounded-lg p-4 flex flex-col justify-between">
-                    <span class="text-xs font-medium text-zinc-500 uppercase tracking-wider">Total Stock Value</span>
+                    <span class="text-xs font-medium text-zinc-500 uppercase tracking-wider">{{ __('Total Stock Value') }}</span>
                     <span class="text-3xl font-bold text-zinc-900 mt-2">
                         {{ number_format($totalStockValueSum) }}
                     </span>
@@ -55,14 +55,14 @@
                 <!-- Card Header -->
                 <div class="flex items-center justify-between px-6 py-4 border-b border-zinc-200">
                     <div>
-                        <h3 class="text-sm font-semibold text-zinc-900">Manage Products</h3>
-                        <p class="text-xs text-zinc-500 mt-0.5">Add, update, or remove physical items in your inventory.</p>
+                        <h3 class="text-sm font-semibold text-zinc-900">{{ __('Manage Products') }}</h3>
+                        <p class="text-xs text-zinc-500 mt-0.5">{{ __('Add, update, or remove physical items in your inventory.') }}</p>
                     </div>
                     <x-primary-button href="{{ route('products.create') }}" class="h-8 px-3 text-xs">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
                         </svg>
-                        Add product
+                        {{ __('Add product') }}
                     </x-primary-button>
                 </div>
 
@@ -122,7 +122,7 @@
                                     <td class="px-6 py-3 whitespace-nowrap text-sm">
                                         <span
                                             class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-zinc-100 text-zinc-700">
-                                            {{ $product->category->name }}
+                                            {{ $product->category?->name ?? __('messages.uncategorized') }}
                                         </span>
                                     </td>
                                     <td class="px-6 py-3 whitespace-nowrap text-sm font-medium text-zinc-900">
@@ -137,11 +137,11 @@
                                     <td class="px-6 py-3 whitespace-nowrap text-right text-sm font-medium">
                                         <div class="inline-flex items-center gap-1">
                                             <x-secondary-button href="{{ route('products.edit', $product) }}" class="h-7 px-2.5 text-xs">
-                                                Edit
+                                                {{ __('Edit') }}
                                             </x-secondary-button>
                                             <x-danger-button type="button" variant="link" class="h-7 px-2.5 text-xs"
-                                                x-on:click.prevent="deleteProductId = {{ $product->id }}; deleteProductName = '{{ addslashes($product->name) }}'; $dispatch('open-modal', 'confirm-product-deletion')">
-                                                Delete
+                                                x-on:click.prevent="deleteProductId = {{ $product->id }}; deleteProductName = {{ Js::from($product->name) }}; $dispatch('open-modal', 'confirm-product-deletion')">
+                                                {{ __('Delete') }}
                                             </x-danger-button>
                                         </div>
                                     </td>

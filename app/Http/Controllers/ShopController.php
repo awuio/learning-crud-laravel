@@ -21,7 +21,8 @@ class ShopController extends Controller
                 $query->where('category_id', request('category_id'));
             })
             ->latest()
-            ->paginate(8);
+            ->paginate(8)
+            ->withQueryString();
 
         $popularProducts = Cache::remember('shop_popular_products', 3600, function () {
             return Product::with('category')
@@ -38,8 +39,11 @@ class ShopController extends Controller
     {
         $product->incrementViews();
 
+        $product->load('category');
+
         // Fetch up to 10 related products from the same category, excluding the current product
-        $relatedProducts = Product::where('category_id', $product->category_id)
+        $relatedProducts = Product::with('category')
+            ->where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
             ->take(10)
             ->get();

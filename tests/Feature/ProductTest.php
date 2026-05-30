@@ -24,6 +24,12 @@ test('admin can view products index', function () {
     $response->assertViewHas('products');
 });
 
+test('non-admin cannot view products index', function () {
+    $response = $this->actingAs($this->user)->get(route('products.index'));
+
+    $response->assertStatus(403);
+});
+
 test('admin can create a new product with image', function () {
     $category = Category::factory()->create();
     $image = UploadedFile::fake()->image('product.jpg');

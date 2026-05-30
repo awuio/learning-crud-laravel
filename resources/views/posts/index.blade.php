@@ -73,7 +73,7 @@
                                                 Edit
                                             </x-secondary-button>
                                             <x-danger-button type="button" variant="link" class="h-7 px-2.5 text-xs"
-                                                x-on:click.prevent="deletePostId = {{ $post->id }}; deletePostTitle = '{{ addslashes($post->title) }}'; $dispatch('open-modal', 'confirm-post-deletion')">
+                                                x-on:click.prevent="deletePostId = {{ $post->id }}; deletePostTitle = {{ Js::from($post->title) }}; $dispatch('open-modal', 'confirm-post-deletion')">
                                                 Delete
                                             </x-danger-button>
                                         </div>

@@ -32,6 +32,8 @@ class BlogController extends Controller
         // Load categories with count of their posts to keep sidebar counters consistent
         $categories = Category::withCount('posts')->get();
 
+        $post->load('category');
+
         return view('blog.show', compact('categories', 'post'));
     }
 }

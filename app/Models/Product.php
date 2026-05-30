@@ -12,6 +12,18 @@ class Product extends Model
     use HasFactory, SoftDeletes;
 
     /**
+     * The "booted" method of the model.
+     * Clear popular products cache when any product changes.
+     */
+    protected static function booted(): void
+    {
+        $clearCache = fn () => \Illuminate\Support\Facades\Cache::forget('shop_popular_products');
+
+        static::saved($clearCache);
+        static::deleted($clearCache);
+    }
+
+    /**
      * Fields that are safe to mass-assign.
      * Note: 'views' is intentionally excluded — use incrementViews() instead.
      */
@@ -33,9 +45,6 @@ class Product extends Model
         $this->increment('views');
     }
 
-    /**
-     * Get the category that owns the product.
-     */
     /**
      * Get the full URL for the product image.
      */

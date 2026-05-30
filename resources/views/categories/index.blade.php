@@ -58,7 +58,7 @@
                                                 Edit
                                             </x-secondary-button>
                                             <x-danger-button type="button" variant="link" class="h-7 px-2.5 text-xs"
-                                                x-on:click.prevent="deleteCategoryId = {{ $category->id }}; deleteCategoryName = '{{ addslashes($category->name) }}'; $dispatch('open-modal', 'confirm-category-deletion')">
+                                                x-on:click.prevent="deleteCategoryId = {{ $category->id }}; deleteCategoryName = {{ Js::from($category->name) }}; $dispatch('open-modal', 'confirm-category-deletion')">
                                                 Delete
                                             </x-danger-button>
                                         </div>

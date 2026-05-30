@@ -35,11 +35,11 @@ Route::middleware('auth')->group(function () {
         Route::resource('categories', CategoryController::class);
         Route::resource('posts', PostController::class);
         Route::resource('products', ProductController::class);
-    });
 
-    Route::get('/dashboard', \App\Http\Controllers\DashboardController::class)
-        ->middleware(['verified'])
-        ->name('dashboard');
+        Route::get('/dashboard', \App\Http\Controllers\DashboardController::class)
+            ->middleware(['verified'])
+            ->name('dashboard');
+    });
 });
 
 require __DIR__.'/auth.php';

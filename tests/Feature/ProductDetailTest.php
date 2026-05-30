@@ -49,7 +49,7 @@ class ProductDetailTest extends TestCase
             'price' => 120000,
             'quantity' => 5,
             'category_id' => $category->id,
-            'views' => 5, // Starts at 5 views
+            'views' => 0, // Starts at 0 views
         ]);
 
         // 1st visit
